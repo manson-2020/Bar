@@ -1,0 +1,47 @@
+/* pages/service/service.wxss */
+
+.main {
+    margin: 50rpx 48rpx 0;
+    font-weight: 400;
+    letter-spacing: 9rpx;
+}
+
+.title {
+    text-align: center;
+}
+
+.service-tel{
+    margin-top: 54rpx;
+}
+
+.explain{
+    margin-top: 60rpx;
+    line-height: 45rpx;
+    letter-spacing: 7rpx;
+    text-indent: 2rem;
+}
+
+.closeBtn {
+    margin-top: 132rpx;
+    height: 90rpx;
+    line-height: 90rpx;
+    position: relative;
+    text-align: center;
+}
+
+.border-btn {
+    width: 100%;
+    height: 100%;
+}
+
+.btn-text {
+    background-image: -webkit-linear-gradient(45deg, #FB61C6 0%, #FB577B 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    font-size: 42rpx;
+    position: absolute;
+    left: 0;
+    right: 0;
+}

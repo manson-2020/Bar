@@ -1,0 +1,73 @@
+/* pages/basicInfo/basicInfo.wxss */
+.container {
+    text-align: right;
+}
+
+.main, .main-2 {
+    width: 700rpx;
+    margin: 80rpx auto 0;
+    overflow: hidden;
+    background: #1B1B1B;
+    text-align: left;
+    border-radius: 14rpx;
+    box-sizing: border-box;
+    padding: 0 37rpx 56rpx;
+}
+
+.main-2 {
+    margin-top: 30rpx;
+}
+
+.option {
+    border-bottom: 1rpx solid rgba(153, 153, 153, 0.6);
+    padding-bottom: 25rpx;
+}
+
+.option-title {
+    display: block;
+    color: #fff;
+    font-size: 28rpx;
+    margin-top: 39rpx;
+}
+
+.radio-group,
+.input {
+    margin-top: 31rpx;
+    color: #999;
+}
+
+.describe {
+    color: #fff;
+}
+
+.icon-done {
+    margin-top: 73rpx;
+    margin-right: 29rpx;
+    margin-bottom: 33rpx;
+    width: 120rpx;
+    height: 120rpx;
+}
+
+.radio-text,
+.placeholder {
+    color: #999;
+    font-size: 25.2rpx;
+}
+
+.radio-text {
+    margin: 0 70rpx 0 19rpx;
+}
+
+.tips-view{
+    text-align: left;
+    margin-top: 120rpx;
+    margin-left: 68rpx;
+}
+
+.tips {
+    background: linear-gradient(45deg, rgba(251, 97, 198, 1) 0%, rgba(251, 87, 123, 1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-size: 27rpx;
+}

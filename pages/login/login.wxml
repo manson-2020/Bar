@@ -1,0 +1,18 @@
+<!-- login.wxml -->
+<view class="container">
+    <view class="main">
+        <view class="option">
+            <view class="option-box" bindtap="dropDownMenu">
+                <text class="option-text">{{firstBars.name}}（20m）</text>
+                <image class="icon-downMore" src="../../images/icon-downMore.png" />
+            </view>
+            <image bindtap="scanCode" src="../../images/icon-qr.png" class="icon-qr" />
+        </view>
+        <view wx:if="{{isShowMenu}}" class="drop-down white_color">
+            <text wx:for="{{BarsList}}" wx:key="*this.bid" class="menu-item">
+                {{item.name}}（20m）
+            </text>
+        </view>
+    </view>
+    <image bindtap="nextStep" src="../../images/icon-nextStep.png" class="icon-nextStep" />
+</view>

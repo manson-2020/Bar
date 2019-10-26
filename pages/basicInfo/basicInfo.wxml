@@ -1,0 +1,57 @@
+<!-- pages/basicInfo/basicInfo.wxml -->
+<view class="container">
+    <view class="main">
+        <view class="option">
+            <text class="option-title">用户类型：</text>
+            <radio-group class="radio-group" data-choose="ident" bindchange="choose">
+                <label class="radio-label">
+                    <radio value="0" />
+                    <text class="radio-text">普通会员</text>
+                </label>
+                <label class="radio-label">
+                    <radio value="1" />
+                    <text class="radio-text">工作人员</text>
+                </label>
+            </radio-group>
+        </view>
+        <view class="option">
+            <text class="option-title">昵称/姓名：</text>
+            <input bindinput="saveInput" data-item="nickname" class="input" value="{{nickname}}" placeholder="（工作人员请填写姓名）" placeholder-class="placeholder" />
+        </view>
+        <view class="option">
+            <text class="option-title">手机号码：</text>
+            <input bindinput="saveInput" data-item="phoneNumber" class="input" value="{{phoneNumber}}" placeholder="（仅限消息提醒，其他用户无法查看）" placeholder-class="placeholder" />
+        </view>
+        <view class="option">
+            <text class="option-title">性别：</text>
+            <radio-group class="radio-group" data-choose="gender" bindchange="choose">
+                <label class="radio-label">
+                    <radio value="0" />
+                    <text class="radio-text">男</text>
+                </label>
+                <label class="radio-label">
+                    <radio value="1" />
+                    <text class="radio-text">女</text>
+                </label>
+            </radio-group>
+        </view>
+        <view class="option">
+            <text class="option-title">当前大厅：</text>
+            <input bindinput="saveInput" data-item="hall" class="input" value="{{hall}}" placeholder="请填写当前大厅" placeholder-class="placeholder" />
+        </view>
+    </view>
+    <view wx:if="{{ident == 0}}" class="main-2">
+        <view class="option">
+            <text class="option-title">卡座号：</text>
+            <input bindinput="saveInput" data-item="seatNumber" class="input" value="{{seatNumber}}" placeholder="填写座位号可以大幅增加收到礼物的机会" placeholder-class="placeholder" />
+        </view>
+        <view class="option">
+            <text class="option-title">衣服颜色：</text>
+            <input bindinput="saveInput" data-item="clothesColor" class="input" value="{{clothesColor}}" placeholder="填写衣服颜色可以大幅增加收到礼物的机会" placeholder-class="placeholder" />
+        </view>
+    </view>
+    <view class="tips-view">
+        <text class="tips">重要提示：保存后，性别将不能修改</text>
+    </view>
+    <image src="../../images/icon-done.png" bindtap="done" class="icon-done" />
+</view>

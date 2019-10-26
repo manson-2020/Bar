@@ -1,0 +1,134 @@
+<!-- index.wxml -->
+<view class="container">
+    <view style="height: {{statusBarHeight}}px" class="statusBar"></view>
+    <view class="header" style="height: {{menuButton.height}}px;">
+        <image src="../../images/icon-qr.png" class="icon-left" bindtap="scanCode" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
+        <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
+            <image src="../../images/icon-search.png" class="icon-search" />
+            <input class="search-input" />
+        </view>
+    </view>
+    <view class="topBar">
+        <view class="topBar-item {{tabIndex == index && 'fs36'}}" wx:for="{{topBar}}" wx:key="*this" data-index="{{index}}" bindtap="switchTab">
+            <view class="tab">
+                <text class="{{tabIndex == index && 'fs40'}}">{{item}}</text>
+                <image catchtap="dropDown" data-index="{{index}}" class="icon-down" src="../../images/icon-down.png" />
+            </view>
+            <view wx:if="{{tabIndex == index}}" class="active" />
+        </view>
+    </view>
+    <view wx:if="{{showDropDownMenu}}" class="drop-down-menu fs28">
+        <view wx:for="{{dropDownMenu}}" wx:key="index" class="menu-item">{{item}}</view>
+    </view>
+    <view wx:if="{{!showDropDownMenu}}" class="option">
+        <view wx:for="{{option}}" bindtap="goto" data-target="{{item.name}}" class="option-item" wx:key="*this.text">
+            <image class="option-icon" src="../../images/icon-{{item.name}}.png" />
+            <text class="option-text">{{item.text}}</text>
+        </view>
+    </view>
+    <view wx:if="{{tabIndex == 0 && !showDropDownMenu}}">
+        <view class="home" style="padding-bottom: {{bottomBarHeight}}px">
+            <view class="box-item" wx:for="{{userList}}" wx:key="index">
+                <image class="avatar" src="{{item.avatar}}" />
+                <view class="filter" />
+                <view class="item-text fs26 {{item.isTribe ? 'red_color' : 'white_color'}}">
+                    昵称：{{item.nickname}}
+                </view>
+                <view class="item-text fs18 {{item.isTribe ? 'red_color' : 'white_color'}}">
+                    <text>房间：{{item.room}}</text>
+                    <text>衣服：{{item.clothes}}</text>
+                </view>
+            </view>
+        </view>
+        <view id="bottomBar" class="homeTips {{hasUnderline && 'hasUnderline'}}">
+            <text class="fs30 white_color">当前大厅在线人数：58人</text>
+            <view class="fs24 qrcodeBtn">显示大厅二维码</view>
+        </view>
+    </view>
+    <view wx:if="{{tabIndex == 1}}">
+        <view class="groupChatRoom">
+            <view class="master">
+                <view class="userInfo white_color">
+                    <image class="avatar" src="../../images/defaultAvatar.png" />
+                    <view class="user-text">
+                        <view class="name fs30">张慧 A61</view>
+                        <view class="clothes fs24">蓝色衣服</view>
+                    </view>
+                </view>
+                <view class="group-wrapper">
+                    <view class="group">
+                        <view class="user first white_color">
+                            <view class="float">
+                                <view class="userName fs17">肖战 A32</view>
+                                <view class="userClothes fs12">蓝色衣服</view>
+                            </view>
+                        </view>
+                        <view class="user second white_color">
+                            <view class="float">
+                                <view class="userName fs17">肖战 A32</view>
+                                <view class="userClothes fs12">蓝色衣服</view>
+                            </view>
+                        </view>
+                        <view class="user third white_color">
+                            <view class="float">
+                                <view class="userName fs17">肖战 A32</view>
+                                <view class="userClothes fs12">蓝色衣服</view>
+                            </view>
+                        </view>
+                    </view>
+                    <image class="icon-next" src="../../images/icon-next.png" />
+                </view>
+            </view>
+            <view class="notice">
+                <image class="icon-notice" src="../../images/icon-notice.png" />
+                <view class="notice-content white_color">
+                    <view class="solid fs26">
+                        <text>肖战给深蓝送了一个么么哒</text>
+                        <text>2019-9-24</text>
+                    </view>
+                    <view class="dotted fs22">
+                        <text>肖战给深蓝送了一个么么哒</text>
+                        <text>2019-9-24 20:20</text>
+                    </view>
+                </view>
+                <view />
+            </view>
+            <view class="chatBox">
+                <image class="targetAvatar" src="../../images/defaultAvatar.png" />
+                <view class="chatFrame">
+                    <view class="chat-text fs26">蓝湛，今天思追抄家规了吗？云深不知处防火防盗防魏婴，你防是不防？</view>
+                    <text class="chat-time fs20">10:40</text>
+                </view>
+            </view>
+            <!-- <view class="roomTips white_color fs28">先送礼物刷好感度再聊天，成功率会更高哦~~</view> -->
+        </view>
+        <view class="bottomBar">
+            <input class="inputFrame" />
+            <button size="mini" class="sendBtn">发送</button>
+        </view>
+    </view>
+    <view wx:if="{{tabIndex == 2}}">
+        <view class="singleChatRoom">
+            <view class="master">
+                <view class="userInfo white_color">
+                    <image class="avatar" src="../../images/defaultAvatar.png" />
+                    <view class="user-text">
+                        <view class="name fs30">张慧 A61</view>
+                        <view class="clothes fs24">蓝色衣服</view>
+                    </view>
+                </view>
+            </view>
+            <view class="chatBox">
+                <image class="targetAvatar" src="../../images/defaultAvatar.png" />
+                <view class="chatFrame">
+                    <view class="chat-text fs26">蓝湛，今天思追抄家规了吗？云深不知处防火防盗防魏婴，你防是不防？</view>
+                    <text class="chat-time fs20">10:40</text>
+                </view>
+            </view>
+        </view>
+        <view class="bottomBar">
+            <input class="inputFrame" />
+            <button size="mini" class="sendBtn">发送</button>
+        </view>
+    </view>
+</view>

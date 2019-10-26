@@ -1,0 +1,22 @@
+{
+	"pages": [
+		"pages/login/login",
+		"pages/index/index",
+		"pages/menu/my/my",
+		"pages/menu/withdrawal/withdrawal",
+		"pages/menu/service/service",
+		"pages/basicInfo/basicInfo",
+		"pages/menu/query/query",
+		"pages/menu/gift/gift"
+	],
+	"window": {
+		"navigationBarBackgroundColor": "#000",
+		"navigationBarTextStyle": "white"
+	},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于小程序位置接口的效果展示" 
+		}
+	},
+	"sitemapLocation": "sitemap.json"
+}

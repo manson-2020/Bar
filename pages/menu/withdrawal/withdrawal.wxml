@@ -1,0 +1,53 @@
+<!-- pages/withdraw/withdraw.wxml -->
+<view class="container white_color">
+    <view style="height: {{statusBarHeight}}px;" class="statusBar"></view>
+    <view class="header" style="height: {{menuButton.height}}px;">
+        <image src="../../../images/icon-back.png" class="icon-left" bindtap="goBack" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
+        <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
+            <image src="../../../images/icon-search.png" class="icon-search" />
+            <input class="search-input" />
+        </view>
+    </view>
+    <view class="main white_color">
+        <view class="title fs36">有钱的肖战</view>
+        <view class="option1 fs26">
+            <text class="key">账户余额：</text>
+            <text class="value">￥520.20</text>
+        </view>
+        <view class="option2 fs26">
+            <text class="key">提现金额：</text>
+            <input class="value" type="number" />
+        </view>
+        <view class="tips fs16">
+            <view class="tips-title">友情提示：</view>
+            <view>1.提现金额必须是10或100的倍数;</view>
+            <view>2.会员提现至微信钱包;</view>
+        </view>
+        <view class="btn-container fs30">
+            <view class="confirm">
+                <image src="../../../images/bg-btn.png" />
+                <text>提 现</text>
+            </view>
+            <view class="cancel" bindtap="goBack">
+                <image src="../../../images/border-btn-mini.png" />
+                <text class="cancel-text">取 消</text>
+            </view>
+        </view>
+    </view>
+    <view class="bottom">
+        <view class="bottom-title fs30">
+            <image class="title-image" src="../../../images/bg-withdrawal.png" />
+            <text class="title-text">提现详情</text>
+        </view>
+        <scroll-view class="record fs22" scroll-y="{{true}}">
+            <view wx:for="{{record}}" wx:key="index" class="record-item">
+                <text class="time">{{item.time}}</text>
+                <text class="money">￥ {{item.money}}</text>
+            </view>
+        </scroll-view>
+        <view class="more-box fs22">
+            <image class="icon-downMore" src="../../../images/icon-downMore.png" />
+            <text>向下滑动查看更多...</text>
+        </view>
+    </view>
+</view>
