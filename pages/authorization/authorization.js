@@ -1,4 +1,4 @@
-// pages/menu/gift/gift.js
+// pages/authorization/authorization.js
 Page({
 
   /**

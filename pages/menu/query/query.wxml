@@ -14,63 +14,43 @@
         </view>
     </view>
     <view wx:if="{{tabIndex == 0}}" class="giftList">
-        <view class="gift-item">
+        <view wx:for="{{giftList}}" wx:key="index" class="gift-item">
             <view class="userInfo">
                 <view class="user-avatar">
-                    <image class="user-image" src="../../../images/defaultAvatar.png" />
+                    <image class="user-image" src="https://bar.shdong.cn/public/static/img/avatar.jpg" />
                     <view class="filter" />
                 </view>
                 <view class="user-text white_color">
-                    <view class="user-name fs26">肖 战 A61</view>
-                    <view class="fs20">2019-09-21 21:21</view>
+                    <view class="user-name fs26">{{item.nickname}} {{item.seat}}</view>
+                    <view class="fs20">{{item.time}}</view>
                 </view>
             </view>
             <view class="gift white_color fs26">
-                <text class="gift-type">跑车 X1</text>
+                <text class="gift-type">{{item.figt}}</text>
                 <text class="price">
                     <text class="symbol">+ ￥</text>
-                    <text class="number">227</text>
-                </text>
-            </view>
-        </view>
-        <view class="gift-item">
-            <view class="userInfo">
-                <view class="user-avatar">
-                    <image class="user-image" src="../../../images/defaultAvatar.png" />
-                    <view class="filter" />
-                </view>
-                <view class="user-text white_color">
-                    <view class="user-name fs26">肖 战 A61</view>
-                    <view class="fs20">2019-09-21 21:21</view>
-                </view>
-            </view>
-            <view class="gift white_color fs26">
-                <text class="gift-type">跑车 X1</text>
-                <text class="price">
-                    <text class="symbol">+ ￥</text>
-                    <text class="number">227</text>
+                    <text class="number">{{item.money}}</text>
                 </text>
             </view>
         </view>
     </view>
-    
     <view wx:if="{{tabIndex == 1}}" class="giftList">
-        <view class="gift-item">
+        <view wx:for="{{giftList}}" wx:key="index" class="gift-item">
             <view class="userInfo">
                 <view class="user-avatar">
-                    <image class="user-image" src="../../../images/defaultAvatar.png" />
+                    <image class="user-image" src="https://bar.shdong.cn/public/static/img/avatar.jpg" />
                     <view class="filter" />
                 </view>
                 <view class="user-text white_color">
-                    <view class="user-name fs26">肖 战 A61</view>
-                    <view class="fs20">2019-09-21 21:21</view>
+                    <view class="user-name fs26">{{item.nickname}} {{item.seat}}</view>
+                    <view class="fs20">{{item.time}}</view>
                 </view>
             </view>
             <view class="gift white_color fs26">
-                <text class="gift-type">跑车 X1</text>
+                <text class="gift-type">{{item.figt}}</text>
                 <text class="price">
                     <text class="symbol">+ ￥</text>
-                    <text class="number">227</text>
+                    <text class="number">{{item.money}}</text>
                 </text>
             </view>
         </view>

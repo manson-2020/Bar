@@ -10,15 +10,10 @@
     text-align: center;
 }
 
-.service-tel{
-    margin-top: 54rpx;
-}
-
 .explain{
     margin-top: 60rpx;
     line-height: 45rpx;
     letter-spacing: 7rpx;
-    text-indent: 2rem;
 }
 
 .closeBtn {

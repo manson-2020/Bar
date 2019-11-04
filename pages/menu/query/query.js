@@ -3,14 +3,12 @@ const app = getApp();
 
 Page({
 
-	/**
-	 * 页面的初始数据
-	 */
 	data: {
 		statusBarHeight: app.globalData.statusBarHeight,
 		menuButton: app.globalData.menuButton,
 		topTab: ["收到", "送出"],
-		tabIndex: 0
+		tabIndex: 0,
+		giftList: []
 	},
 
 	goBack() {
@@ -18,12 +16,19 @@ Page({
 	},
 
 	switchTab(e) {
-		this.setData({ tabIndex: e.currentTarget.dataset.index })
+		this.setData({ tabIndex: e.currentTarget.dataset.index }, () => {
+			this.apiRequest(e.currentTarget.dataset.index + 1);
+		});
 	},
 
-	/**
-	 * 生命周期函数--监听页面加载
-	 */
+	apiRequest(param = 1) {
+		wx.apiRequest("/api/user/myGift", {
+			data: { type: param },
+			success: res => this.setData({ giftList: res.data.data })
+		});
+	},
+
 	onLoad(options) {
+		this.apiRequest();
 	},
 })

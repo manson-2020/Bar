@@ -10,11 +10,7 @@
     </view>
     <view class="main white_color">
         <view class="title fs36">客服中心</view>
-        <view class="service-tel fs26">客服中心联系电话：***********</view>
-        <view class="explain fs22">
-            说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字
-            文字说明文字
-        </view>
+        <view class="explain fs22">{{content}}</view>
         <view class="closeBtn" bindtap="goBack">
             <image class="border-btn" src="../../../images/border-btn.png" />
             <text class="btn-text">关闭</text>

@@ -40,21 +40,45 @@
 .avatar {
     width: 98rpx;
     height: 98rpx;
+    border-radius: 50%;
+}
+
+.value-text {
+    margin-right: 38rpx;
 }
 
 .icon-right {
     width: 18rpx;
     height: 35rpx;
-    margin-left: 37rpx;
 }
 
-.save-btn {
+.transform-btn {
+    position: relative;
+    margin-top: 20rpx;
     height: 90rpx;
-    margin-top: 62rpx;
-    background: linear-gradient(45deg, #FB61C6, #FB577B);
-    border-radius: 20rpx;
     line-height: 90rpx;
     text-align: center;
-    letter-spacing: 2rem;
-    text-indent: 2rem;
+}
+
+.transform-btn image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    z-index: -1;
+}
+
+.transform-btn text {
+    background-image: -webkit-linear-gradient(45deg, #FB61C6 0%, #FB577B 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.6rem;
+    text-indent: 0.6rem;
+}
+
+.tips {
+    margin-top: 20rpx;
+    color: #999;
+    padding-left: 40rpx;
 }

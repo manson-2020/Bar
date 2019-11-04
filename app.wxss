@@ -87,6 +87,14 @@ radio .wx-radio-input.wx-radio-input-checked::before {
     font-size: 42rpx;
 }
 
+.fs62 {
+    font-size: 62rpx;
+}
+
+.bg_fff {
+    background: #fff;
+}
+
 .white_color {
     color: #fff;
 }
@@ -95,8 +103,16 @@ radio .wx-radio-input.wx-radio-input-checked::before {
     color: #FB577B;
 }
 
-.statusBar {
-    background: #000;
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
 }
 
 .header {

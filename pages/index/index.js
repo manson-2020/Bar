@@ -1,145 +1,72 @@
-// pages/index/index.js
-const app = getApp();
+//pges/login/login.js
+
+const app = getApp()
 
 Page({
-	/**
-	 * 页面的初始数据
-	 */
-	data: {
-		showDropDownMenu: false,
+    data: {
+        isShowMenu: false,
+        params: {
+            bar: []
+        },
+    },
 
-		statusBarHeight: app.globalData.statusBarHeight,
-		menuButton: app.globalData.menuButton,
-		tabIndex: 0,
-		hasUnderline: false,
-		bottomBarHeight: 0,
-		topBar: ["熹客酒吧", "群聊房间", "私聊房间"],
-		option: [
-			{ name: "gift", text: "礼 物" },
-			{ name: "withdrawal", text: "提 现" },
-			{ name: "query", text: "查 询" },
-			{ name: "my", text: "我 的" },
-			{ name: "service", text: "客 服" }
-		],
-		userList: [
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色", isTribe: true },
-			{ avatar: "../../images/avatar.png", nickname: "张晓梅", room: "A61", clothes: "红色" },
-		],
-		dropDownMenu: [],
-	},
+    goto() {
+        let url;
+        console.log(this.data.params.bar[0].page)
+        switch (this.data.params.bar[0].page) {
+            case 1:
+                url = `../basicInfo/basicInfo?showMain=1&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
+                break;
+            case 2:
+                url = `../basicInfo/basicInfo?showMain=0&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
+                break;
+            default:
+                url = `../home/home`
+                break;
+        }
+        wx.navigateTo({ url })
+    },
 
-	switchTab(e) {
-		this.setData({ tabIndex: e.currentTarget.dataset.index, showDropDownMenu: false });
-	},
+    dropDownMenu() {
+        this.setData({ isShowMenu: !this.data.isShowMenu })
+    },
 
-	dropDown(e) {
-		switch (e.currentTarget.dataset.index) {
-			case 0:
-				wx.getLocation({
-					altitude: false,
-					success(res) {
-						wx.request({
-							url: app.globalData.requestUrl + '/api/login/getbar',
-							method: "post",
-							data: {
-								longitude: res.longitude,
-								latitude: res.latitude,
-							},
-							success(res) {
-								console.log(res);
-							},
-							fail(err) {
-								console.log(err);
-							}
-						})
-						console.log(res);
-					}
-				});
+    select(e) {
+        this.data.params.bar.unshift(this.data.params.bar.splice(e.currentTarget.dataset.index, 1)[0]);
+        this.setData({ params: this.data.params, isShowMenu: false });
+    },
 
-				this.setData({ dropDownMenu: ['爱丽丝仙境大厅（距离：54m）', '爱丽丝仙境大厅（距离：54m）'] });
-				break;
-			case 1:
-				this.setData({ dropDownMenu: ['Group Chat 1', 'Group Chat 2'] });
-				break;
-			case 2:
-				this.setData({ dropDownMenu: ['Single Chat 1', 'Single Chat 2'] });
-				break;
-		}
-		this.setData({ showDropDownMenu: !this.data.showDropDownMenu });
-	},
+    scanCode() {
+        wx.scanCode({
+            success: res => {
+                console.log(res)
+                wx.showToast({
+                    title: '成功',
+                    duration: 2000
+                })
+            },
+            fail: res => {
+                wx.showToast({
+                    title: '失败',
+                    duration: 2000
+                })
+            }
+        })
+    },
 
-	scanCode() {
-		wx.scanCode({
-			success: res => {
-				wx.showToast({
-					title: '成功',
-					duration: 2000
-				})
-			},
-			fail: res => {
-				wx.showToast({
-					title: '失败',
-					duration: 2000
-				})
-			},
-			complete: (res) => {
-			}
-		})
-	},
-
-	goto(e) {
-		wx.navigateTo({
-			url: `../menu/${e.currentTarget.dataset.target}/${e.currentTarget.dataset.target}`
-		})
-	},
-
-	onLoad() {
-		wx.getSystemInfo({
-			success: res => {
-				if (!res.model.search(/iPhone X|iPhone 11/)) {
-					this.setData({ hasUnderline: true });
-				}
-			}
-		});
-
-		const query = wx.createSelectorQuery()
-		query.select('#bottomBar').boundingClientRect();
-		query.exec(res => res[0] && this.setData({ bottomBarHeight: res[0].height }))
-
-	},
+    onLoad() {
+        wx.getLocation({
+            type: 'wgs84',
+            success: res => {
+                wx.apiRequest("/api/login/getbar", {
+                    method: "post",
+                    data: {
+                        latitude: res.latitude,
+                        longitude: res.longitude,
+                    },
+                    success: res => res.data.code == 200 && this.setData({ params: res.data.data })
+                })
+            }
+        })
+    }
 })

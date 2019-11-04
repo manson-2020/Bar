@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -22,7 +22,7 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.8.3",
-	"appid": "wxa547b18bc75678e9",
+	"appid": "wxc10b15ce6c69a52a",
 	"projectname": "BarIM",
 	"debugOptions": {
 		"hidedInDevtools": []

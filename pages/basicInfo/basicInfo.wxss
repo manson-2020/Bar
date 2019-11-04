@@ -1,6 +1,20 @@
 /* pages/basicInfo/basicInfo.wxss */
-.container {
-    text-align: right;
+
+.statusBar {
+    top: 0;
+}
+
+.statusBar, .header {
+    position: fixed;
+    display: inline-block;
+    z-index: 999;
+    width: 100vw;
+    background-color: #000;
+}
+
+.header {
+    text-indent: 20rpx;
+    font-weight: bold;
 }
 
 .main, .main-2 {
@@ -8,7 +22,6 @@
     margin: 80rpx auto 0;
     overflow: hidden;
     background: #1B1B1B;
-    text-align: left;
     border-radius: 14rpx;
     box-sizing: border-box;
     padding: 0 37rpx 56rpx;
@@ -30,8 +43,7 @@
     margin-top: 39rpx;
 }
 
-.radio-group,
-.input {
+.radio-group, .input {
     margin-top: 31rpx;
     color: #999;
 }
@@ -40,16 +52,12 @@
     color: #fff;
 }
 
-.icon-done {
-    margin-top: 73rpx;
-    margin-right: 29rpx;
-    margin-bottom: 33rpx;
+.icon-step {
     width: 120rpx;
     height: 120rpx;
 }
 
-.radio-text,
-.placeholder {
+.radio-text, .placeholder {
     color: #999;
     font-size: 25.2rpx;
 }
@@ -58,16 +66,19 @@
     margin: 0 70rpx 0 19rpx;
 }
 
-.tips-view{
-    text-align: left;
-    margin-top: 120rpx;
-    margin-left: 68rpx;
-}
-
 .tips {
+    display: inline-block;
     background: linear-gradient(45deg, rgba(251, 97, 198, 1) 0%, rgba(251, 87, 123, 1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    margin-top: 60rpx;
+    margin-left: 68rpx;
     font-size: 27rpx;
+}
+
+.step-btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 75rpx 60rpx 36rpx;
 }

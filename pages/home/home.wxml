@@ -1,0 +1,200 @@
+<!-- index.wxml -->
+<view class="container">
+    <view id="headerBar">
+        <view style="height: {{statusBarHeight}}px" class="statusBar"></view>
+        <view class="header" style="height: {{menuButton.height}}px;">
+            <image src="../../images/icon-qr.png" class="icon-left" bindtap="scanCode" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
+            <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
+                <image src="../../images/icon-search.png" class="icon-search" />
+                <input class="search-input" />
+            </view>
+        </view>
+        <view class="topBar">
+            <view class="topBar-item {{tabIndex == index && 'fs36'}}" wx:for="{{topBar}}" wx:key="*this" data-index="{{index}}" bindtap="switchTab">
+                <view class="tab">
+                    <text class="{{tabIndex == index && 'fs40'}}">{{item}}</text>
+                    <image catchtap="dropDown" data-index="{{index}}" class="icon-down" src="../../images/icon-down.png" />
+                </view>
+                <view wx:if="{{tabIndex == index}}" class="active" />
+            </view>
+        </view>
+        <view wx:if="{{showDropDownMenu}}" class="drop-down-menu fs28">
+            <view wx:for="{{dropDownMenu.list}}" bindtap="switchHall" data-index="{{index}}" data-type="{{dropDownMenu.title}}" wx:key="index" class="menu-item">
+                {{item.name}} {{item.metre && '(' + item.metre + 'm)'}}
+            </view>
+        </view>
+        <view wx:if="{{!showDropDownMenu}}" class="option">
+            <view wx:for="{{option}}" bindtap="goto" data-target="{{item.name}}" class="option-item" wx:key="*this.text">
+                <image class="option-icon" src="../../images/icon-{{item.name}}.png" />
+                <text class="option-text">{{item.text}}</text>
+            </view>
+        </view>
+    </view>
+    <!-- 酒吧大厅 -->
+    <view wx:if="{{tabIndex == 0 && !showDropDownMenu}}" style="margin-top: {{headerBarHeight}}px;">
+        <view class="home" style="padding-bottom: {{bottomBarHeight}}px">
+            <view class="box-item" bindtap="joinRoom" data-uid="{{item.uid}}" style="margin-right: {{((index+1) % 3 == 0) ? 0 : 15}}rpx" wx:for="{{hallInfo.member}}" wx:key="*this.uid">
+                <image class="avatar" src="{{item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
+                <view class="filter" />
+                <view class="item-text fs26 {{item.worker ? 'red_color' : 'white_color'}}">
+                    昵称：{{item.nickname}}
+                </view>
+                <view class="item-text fs18 {{item.worker ? 'red_color' : 'white_color'}}">
+                    <text>卡座：{{item.seat}}</text>
+                    <text style="padding-left: 18rpx">衣服：{{item.color}}</text>
+                </view>
+            </view>
+        </view>
+        <view id="bottomBar" class="homeTips {{hasUnderline && 'hasUnderline'}}">
+            <text class="fs30 white_color">当前大厅在线人数：{{hallInfo.total}}人</text>
+            <view class="fs24 qrcodeBtn" data-type="showQrcode" bindtap="show">显示大厅二维码</view>
+        </view>
+    </view>
+    <!-- 群聊房间 -->
+    <view wx:if="{{tabIndex == 1}}" style="margin-top: {{headerBarHeight+28}}px;">
+        <view class="groupChatRoom">
+            <view class="master">
+                <view class="userInfo white_color">
+                    <image class="avatar" bindtap="show" data-type="showAlert" src="{{targetInfo.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
+                    <view class="user-text">
+                        <view class="name fs30">
+                            {{targetInfo.nickname}} {{targetInfo.seat || 'seat'}}
+                        </view>
+                        <view class="clothes fs24">{{targetInfo.color || 'color'}}</view>
+                    </view>
+                </view>
+                <view wx:if="{{targetInfo.top.length}}" class="group-wrapper">
+                    <view class="group">
+                        <view wx:for="{{targetInfo.top}}" wx:key="*this.uid" style="background-image: url({{item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}});" class="user {{index == 0 && 'first'}} {{index == 1 && 'second'}}">
+                            <view class="float white_color">
+                                <view class="userName fs17">{{item.nickname}} {{item.seat}}</view>
+                                <view class="userClothes fs12">{{item.color}}衣服</view>
+                            </view>
+                        </view>
+                    </view>
+                    <image bindtap="show" data-type="showGroupMember" class="icon-next" src="../../images/icon-next.png" />
+                </view>
+            </view>
+            <view class="notice">
+                <image class="icon-notice" src="../../images/icon-notice.png" />
+                <swiper wx:if="{{noticeList.length}}" class="swiper_container white_color" vertical="true" autoplay="{{true}}" circular="true" interval="1000">
+                    <swiper-item wx:for="{{noticeList}}" wx:key="index" catchtouchmove="stopTouchMove" class="swiper_item fs26">
+                        <text>{{item.msg}}</text>
+                        <text>{{item.time}}</text>
+                    </swiper-item>
+                </swiper>
+            </view>
+            <scroll-view class="scroll-view" scroll-y="true" style="height: calc(100vh - ({{headerBarHeight}}px + 116rpx + 118rpx + 134rpx + {{(hasUnderline ? 11 : 0)}}px));" scroll-with-animation="true" scroll-top="{{scrollTop}}">
+                <view wx:for="{{targetInfo.history}}" wx:if="{{item.rid == targetInfo.rid}}" wx:key="index" class="chatBox">
+                    <image class="targetAvatar" src="{{ item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg' }}" />
+                    <view class="chatFrame">
+                        <view class="chat-text fs26">{{item.msg}}</view>
+                        <text class="chat-time fs20">{{item.time}}</text>
+                    </view>
+                </view>
+            </scroll-view>
+        </view>
+        <view class="bottomBar" style="bottom: {{keyboardHeight || (hasUnderline ? 11 : 0)}}px;">
+            <input class="inputFrame" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindkeyboardheightchange="keyboard" confirm-type="send" bindinput="saveInput" value="{{group}}" data-type="group" />
+            <button size="mini" bindtap="sendMsg" data-type="group" class="sendBtn">发送</button>
+        </view>
+    </view>
+    <!-- 私聊房间 -->
+    <view wx:if="{{tabIndex == 2}}" style="margin-top: {{headerBarHeight+28}}px;">
+        <view class="singleChatRoom">
+            <view class="master">
+                <view class="userInfo white_color">
+                    <image class="avatar" src="{{userInfo.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
+                    <view class="user-text">
+                        <view class="name fs30">
+                            {{userInfo.nickname}} {{userInfo.seat || 'seat'}}
+                        </view>
+                        <view class="clothes fs24">{{userInfo.color || 'color'}}</view>
+                    </view>
+                </view>
+            </view>
+            <scroll-view class="scroll-view" scroll-y="true" style="height: calc(100vh - ({{headerBarHeight}}px + 116rpx + 188rpx + {{(hasUnderline ? 11 : 0)}}px));" scroll-with-animation="true" scroll-top="{{scrollTop}}">
+                <view wx:for="{{userInfo.history}}" wx:key="index" class="chatBox">
+                    <image class="targetAvatar" src="{{ item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg' }}" />
+                    <view class="chatFrame">
+                        <view class="chat-text fs26">{{item.msg}}</view>
+                        <text class="chat-time fs20">{{item.time}}</text>
+                    </view>
+                </view>
+            </scroll-view>
+        </view>
+        <view class="bottomBar" style="bottom: {{keyboardHeight || (hasUnderline ? 11 : 0)}}px;">
+            <input confirm-type="send" bindinput="saveInput" value="{{chat}}" data-type="chat" class="inputFrame" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindkeyboardheightchange="keyboard" confirm-type="send" />
+            <button size="mini" bindtap="sendMsg" data-type="chat" class="sendBtn">发送</button>
+        </view>
+    </view>
+</view>
+<!-- 弹出层 -->
+<view wx:if="{{ showLayer}}" class="layer">
+    <view wx:if="{{!showAlert}}" class="layer-box">
+        <view class="close-box">
+            <image bindtap="hide" src="../../images/icon-close.png" class="icon-close" />
+        </view>
+        <view wx:if="{{showQrcode}}" class="layer-wrapper bg_fff">
+            <text class="qrcode-title fs42">一个密码</text>
+            <image src="{{hallInfo.qrcode}}" class="qrcode-image" />
+        </view>
+        <view wx:if="{{showGift}}" class="layer-wrapper">
+            <view class="gift-container">
+                <view wx:for="{{giftList}}" bindtap="show" data-type="showPay" data-index="{{index}}" wx:key="*this.gid" class="gift-item">
+                    <image src="../../images/gift-car.png" width="12" class="gift-img" />
+                    <text class="white_color fs22">{{item.name}}</text>
+                    <text class="white_color fs18">{{item.price}}</text>
+                </view>
+            </view>
+        </view>
+        <view wx:if="{{showNotice}}" class="layer-wrapper">
+            <view class="notice-box">
+                <view wx:for="{{applyList}}" wx:key="index" class="notice-item">
+                    <text class="notice-msg fs26 white_color">{{item.msg}}</text>
+                    <view wx:if="{{item.type != 0}}" class="notice-btn fs24">
+                        <view class="agree-btn" bindtap="agree" data-uid="{{item.uid}}">同意</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view wx:if="{{showPay}}" class="layer-wrapper bg_fff">
+            <view class="pay-container">
+                <view class="fs36 text-center pay-title">确认付款</view>
+                <view class="fs24 text-center pay-goods">{{currentGoods.name}}</view>
+                <view class="fs62 text-center pay-money">￥{{currentGoods.price}}</view>
+                <view class="jibi-balance" bindtap="pay" data-type="2">
+                    <image class="icon-balance" src="../../images/icon-balance.png" />
+                    <text class="jiabi-text">
+                        <text class="fs32">加币余额</text>
+                        <text class="fs26">（剩余：￥{{hallInfo.money}}）</text>
+                    </text>
+                </view>
+                <view class="wechat-balance" bindtap="pay" data-type="1">
+                    <image class="icon-wechat" src="../../images/icon-wechat.png" />
+                    <text class="wechatpay-text fs32">账户余额</text>
+                </view>
+            </view>
+        </view>
+        <scroll-view scroll-y="true" wx:if="{{showGroupMember}}" class="group-member-container">
+            <view class="group-member-box">
+                <view wx:for="{{groupMember}}" class="group-member white_color" wx:key="*this.uid">
+                    <image class="group-member-avatar" src="{{item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
+                    <view class="userName fs26">{{item.nickname}} {{item.seat}}</view>
+                    <view class="userClothes fs18">{{item.color}}衣服</view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+    <view wx:if="{{showAlert}}" class="layer-alert">
+        <view class="tips-text">是否申请和房主私聊</view>
+        <view class="btn-wrapper">
+            <button class="cancle-btn" bindtap="hide">暂不申请</button>
+            <button class="confirm-btn" bindtap="confirm">立即申请</button>
+        </view>
+    </view>
+</view>
+<view wx:if="{{!showLayer}}" class="fixed-btn" bindtap="show" data-type="showNotice">
+    <view wx:if="{{isMarker}}" class="marker" />
+    <image class="icon-notice_btn" src="../../images/icon-notice_btn.png" />
+</view>
