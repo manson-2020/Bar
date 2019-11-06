@@ -19,7 +19,7 @@
             </view>
         </view>
         <view wx:if="{{showDropDownMenu}}" class="drop-down-menu fs28">
-            <view wx:for="{{dropDownMenu.list}}" bindtap="switchHall" data-index="{{index}}" data-type="{{dropDownMenu.title}}" wx:key="index" class="menu-item">
+            <view wx:for="{{dropDownMenu.list}}" bindtap="switchItem" data-index="{{index}}" data-type="{{dropDownMenu.title}}" wx:key="index" class="menu-item">
                 {{item.name}} {{item.metre && '(' + item.metre + 'm)'}}
             </view>
         </view>
@@ -32,19 +32,21 @@
     </view>
     <!-- 酒吧大厅 -->
     <view wx:if="{{tabIndex == 0 && !showDropDownMenu}}" style="margin-top: {{headerBarHeight}}px;">
-        <view class="home" style="padding-bottom: {{bottomBarHeight}}px">
-            <view class="box-item" bindtap="joinRoom" data-uid="{{item.uid}}" style="margin-right: {{((index+1) % 3 == 0) ? 0 : 15}}rpx" wx:for="{{hallInfo.member}}" wx:key="*this.uid">
-                <image class="avatar" src="{{item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
-                <view class="filter" />
-                <view class="item-text fs26 {{item.worker ? 'red_color' : 'white_color'}}">
-                    昵称：{{item.nickname}}
-                </view>
-                <view class="item-text fs18 {{item.worker ? 'red_color' : 'white_color'}}">
-                    <text>卡座：{{item.seat}}</text>
-                    <text style="padding-left: 18rpx">衣服：{{item.color}}</text>
+        <scroll-view scroll-y="true" style="height: calc(100vh - {{headerBarHeight}}px - {{bottomBarHeight}}px);">
+            <view class="home">
+                <view class="box-item" bindtap="joinRoom" data-uid="{{item.uid}}" style="margin-right: {{((index+1) % 3 == 0) ? 0 : 15}}rpx" wx:for="{{hallInfo.member}}" wx:key="*this.uid">
+                    <image class="avatar" src="{{item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
+                    <view class="filter" />
+                    <view class="item-text fs26 {{item.worker ? 'red_color' : 'white_color'}}">
+                        昵称：{{item.nickname}}
+                    </view>
+                    <view class="item-text fs18 {{item.worker ? 'red_color' : 'white_color'}}">
+                        <text>卡座：{{item.seat}}</text>
+                        <text style="padding-left: 18rpx">衣服：{{item.color}}</text>
+                    </view>
                 </view>
             </view>
-        </view>
+        </scroll-view>
         <view id="bottomBar" class="homeTips {{hasUnderline && 'hasUnderline'}}">
             <text class="fs30 white_color">当前大厅在线人数：{{hallInfo.total}}人</text>
             <view class="fs24 qrcodeBtn" data-type="showQrcode" bindtap="show">显示大厅二维码</view>
@@ -95,14 +97,14 @@
             </scroll-view>
         </view>
         <view class="bottomBar" style="bottom: {{keyboardHeight || (hasUnderline ? 11 : 0)}}px;">
-            <input class="inputFrame" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindkeyboardheightchange="keyboard" confirm-type="send" bindinput="saveInput" value="{{group}}" data-type="group" />
+            <input class="inputFrame" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindfocus="keyboard" bindblur="keyboard" confirm-type="send" bindinput="saveInput" value="{{group}}" data-type="group" />
             <button size="mini" bindtap="sendMsg" data-type="group" class="sendBtn">发送</button>
         </view>
     </view>
     <!-- 私聊房间 -->
     <view wx:if="{{tabIndex == 2}}" style="margin-top: {{headerBarHeight+28}}px;">
         <view class="singleChatRoom">
-            <view class="master">
+            <view wx:if="{{userInfo.nickname}}" class="master">
                 <view class="userInfo white_color">
                     <image class="avatar" src="{{userInfo.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
                     <view class="user-text">
@@ -113,7 +115,8 @@
                     </view>
                 </view>
             </view>
-            <scroll-view class="scroll-view" scroll-y="true" style="height: calc(100vh - ({{headerBarHeight}}px + 116rpx + 188rpx + {{(hasUnderline ? 11 : 0)}}px));" scroll-with-animation="true" scroll-top="{{scrollTop}}">
+            <view wx:else class="white_color text-center">请先选择一个私聊对象</view>
+            <scroll-view wx:if="{{userInfo.nickname}}" class="scroll-view" scroll-y="true" style="height: calc(100vh - ({{headerBarHeight}}px + 116rpx + 188rpx + {{(hasUnderline ? 11 : 0)}}px));" scroll-with-animation="true" scroll-top="{{scrollTop}}">
                 <view wx:for="{{userInfo.history}}" wx:key="index" class="chatBox">
                     <image class="targetAvatar" src="{{ item.avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg' }}" />
                     <view class="chatFrame">
@@ -124,7 +127,7 @@
             </scroll-view>
         </view>
         <view class="bottomBar" style="bottom: {{keyboardHeight || (hasUnderline ? 11 : 0)}}px;">
-            <input confirm-type="send" bindinput="saveInput" value="{{chat}}" data-type="chat" class="inputFrame" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindkeyboardheightchange="keyboard" confirm-type="send" />
+            <input class="inputFrame" confirm-type="send" bindinput="saveInput" value="{{chat}}" data-type="chat" adjust-position="{{ false }}" maxlength="200" bindconfirm="sendMsg" bindfocus="keyboard" bindblur="keyboard" confirm-type="send" />
             <button size="mini" bindtap="sendMsg" data-type="chat" class="sendBtn">发送</button>
         </view>
     </view>
@@ -136,7 +139,7 @@
             <image bindtap="hide" src="../../images/icon-close.png" class="icon-close" />
         </view>
         <view wx:if="{{showQrcode}}" class="layer-wrapper bg_fff">
-            <text class="qrcode-title fs42">一个密码</text>
+            <text class="qrcode-title fs42">{{hallInfo.name}}</text>
             <image src="{{hallInfo.qrcode}}" class="qrcode-image" />
         </view>
         <view wx:if="{{showGift}}" class="layer-wrapper">
@@ -148,15 +151,16 @@
                 </view>
             </view>
         </view>
-        <view wx:if="{{showNotice}}" class="layer-wrapper">
-            <view class="notice-box">
+        <view wx:if="{{showNotice}}" class="layer-wrapper bg_1b">
+            <scroll-view wx:if="{{applyList.length}}" scroll-y="{{true}}" class="notice-box">
                 <view wx:for="{{applyList}}" wx:key="index" class="notice-item">
                     <text class="notice-msg fs26 white_color">{{item.msg}}</text>
                     <view wx:if="{{item.type != 0}}" class="notice-btn fs24">
                         <view class="agree-btn" bindtap="agree" data-uid="{{item.uid}}">同意</view>
                     </view>
                 </view>
-            </view>
+            </scroll-view>
+            <view wx:else class="white_color">暂无申请消息。。。</view>
         </view>
         <view wx:if="{{showPay}}" class="layer-wrapper bg_fff">
             <view class="pay-container">
@@ -172,7 +176,7 @@
                 </view>
                 <view class="wechat-balance" bindtap="pay" data-type="1">
                     <image class="icon-wechat" src="../../images/icon-wechat.png" />
-                    <text class="wechatpay-text fs32">账户余额</text>
+                    <text class="wechatpay-text fs32">微信支付</text>
                 </view>
             </view>
         </view>

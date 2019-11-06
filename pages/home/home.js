@@ -45,32 +45,13 @@ Page({
 				}
 				break;
 			case 2:
-				// console.log("私聊")
+				console.log(this.data.userInfo)
 				break;
 			default:
 				// console.log("大厅")
 				break;
 		}
 		this.setData({ tabIndex: e.currentTarget.dataset.index, showDropDownMenu: false });
-	},
-
-	switchHall(e) {
-		let [bar, type] = [this.data.dropDownMenu.list[e.currentTarget.dataset.index], this.data.dropDownMenu.type];
-		this.setData({ showDropDownMenu: false });
-		switch (type) {
-			case 'groupList':
-				// console.log(bar);
-				this.apiRequest("joinRoom", { uid: bar.uid });
-				break;
-			case 'chatList':
-				// console.log(bar)
-				this.apiRequest("joinRoom", { uid: bar.uid });
-				break;
-			default:
-				this.apiRequest("upinfo", { bid: bar.bid });
-				break;
-		}
-
 	},
 
 	agree(e) {
@@ -80,13 +61,7 @@ Page({
 	dropDown(e) {
 		switch (e.currentTarget.dataset.index) {
 			case 0:
-				wx.getLocation({
-					altitude: false,
-					success: res => this.apiRequest("getbar", {
-						longitude: res.longitude,
-						latitude: res.latitude,
-					})
-				});
+				this.apiRequest("getbar")
 				break;
 			case 1:
 				this.apiRequest("getGroupLists");
@@ -96,25 +71,6 @@ Page({
 				break;
 		}
 		this.setData({ showDropDownMenu: !this.data.showDropDownMenu });
-	},
-
-	scanCode() {
-		wx.scanCode({
-			success: res => {
-				wx.showToast({
-					title: '成功',
-					duration: 2000
-				})
-			},
-			fail: res => {
-				wx.showToast({
-					title: '失败',
-					duration: 2000
-				})
-			},
-			complete: (res) => {
-			}
-		})
 	},
 
 	goto(e) {
@@ -164,7 +120,6 @@ Page({
 
 	sendMsg(e) {
 		if (!this.data.targetInfo.hasgift && this.data.targetInfo.roomtype == 1) {
-			console.log(this.data.targetInfo)
 			wx.showToast({ title: "送过礼物才能发送哦！", icon: 'none' });
 			return;
 		}
@@ -185,7 +140,7 @@ Page({
 	},
 
 	keyboard(e) {
-		this.setData({ keyboardHeight: e.detail.height });
+		this.setData({ keyboardHeight: e.type == "focus" ? e.detail.height : 0 });
 	},
 
 	confirm() {
@@ -199,31 +154,120 @@ Page({
 			ptype: Number(e.currentTarget.dataset.type),
 			rid: this.data[(this.data.tabIndex == 1 ? 'target' : 'user') + 'Info'].rid,
 			gid: this.data.currentGoods.gid,
+			roomtype: this.data.tabIndex
 		})
 	},
 
-	apiRequest(type, data = {}) {
+	switchItem(e) {
+		let [item, type] = [this.data.dropDownMenu.list[e.currentTarget.dataset.index], this.data.dropDownMenu.type];
+		this.setData({ showDropDownMenu: false });
+		switch (type) {
+			case 'groupList':
+				this.apiRequest("joinRoom", { uid: item.uid });
+				break;
+			case 'chatList':
+				this.apiRequest("joinRoom", { uid: item.uid });
+				break;
+			default:
+				this.switchHall(item)
+				// this.apiRequest("upinfo", { bid: item.bid });
+				break;
+		}
+	},
+
+	switchHall(params, url = String()) {
+		switch (Number(params.page)) {
+			case 1: case 2:
+				url = `../basicInfo/basicInfo?showMain=${params.page}&name=${params.name}&bid=${params.bid}`;
+				break;
+			default:
+				url = `../home/home`
+				break;
+		}
+		wx.navigateTo({ url })
+	},
+
+	scanCode() {
+		wx.scanCode({
+			success: resCode => {
+				wx.apiRequest("/api/login/getbar", {
+					success: res => {
+						if (res.data.code == 200) {
+							this.switchHall(JSON.parse(resCode.result));
+							// for (let index = 0; index < res.data.data.bar.length; index++) {
+							// 	if (res.data.data.bar[index].bid == JSON.parse(resCode.result).bid) {
+							// 		this.apiRequest("upinfo", { bid: res.data.data.bar[index].bid });
+							// 		break;
+							// 	} else if (res.data.data.bar.length - 1 == index) {
+							// 		wx.showToast({
+							// 			icon: "none",
+							// 			title: '找不到对应的酒吧',
+							// 			duration: 2000
+							// 		})
+							// 	}
+							// }
+						}
+					}
+				});
+			}
+		})
+	},
+
+	apiRequest(type, data) {
 		switch (type) {
 			case "getGroupMember":
 				wx.apiRequest("/api/room/getGroupMember", {
 					data: { rid: this.data.targetInfo.rid },
-					success: res => {
-						console.log(res.data.data)
-						res.data.code == 200 && this.setData({ groupMember: res.data.data })
-					}
+					success: res => res.data.code == 200 && this.setData({ groupMember: res.data.data })
 				})
 				break;
 			case "giveGift":
 				wx.apiRequest("/api/pay/gift", {
-					data, success: res => {
+					data,
+					success: res => {
 						if (res.data.code == 200) {
+							if (res.data.data.ptype == 2) {
+								wx.showToast({
+									title: '支付成功！',
+									success: _ => {
+										this.hide();
+										this.data.hallInfo.money = res.data.data.money;
+										this.data.targetInfo.hasgift = true;
+										this.setData({ hallInfo: this.data.hallInfo, targetInfo: this.data.targetInfo });
+									},
+									duration: 1200
+								})
+							} else {
+								wx.requestPayment({
+									timeStamp: res.data.data.timeStamp.toString(),
+									nonceStr: res.data.data.nonceStr,
+									package: res.data.data.package,
+									signType: res.data.data.signType,
+									paySign: res.data.data.paySign,
+									success: _ => {
+										wx.apiRequest("/api/pay/selectOrder", {
+											data: { orderId: res.data.data.orderId },
+											success: res => {
+												wx.showToast({
+													title: res.data.msg,
+													success: _ => {
+														this.hide();
+														this.data.targetInfo.hasgift = true;
+														this.setData({ targetInfo: this.data.targetInfo });
+													},
+													duration: 1200
+												})
+											}
+										});
+									},
+									fail: _ => wx.showToast({ title: "支付失败！", icon: "none", duration: 1200 })
+								})
+							}
+
+						} else {
 							wx.showToast({
-								title: '支付成功！',
-								success: _ => {
-									this.hide();
-									this.data.hallInfo.money = res.data.data.money;
-									this.setData({ hallInfo: this.data.hallInfo });
-								},
+								title: res.data.msg,
+								icon: "none",
 								duration: 1200
 							})
 						}
@@ -232,19 +276,16 @@ Page({
 				break;
 			case 'getGroupLists':
 				wx.apiRequest("/api/home/getGroupLists", {
-					data,
 					success: res => res.data.code == 200 && this.setData({ dropDownMenu: { list: res.data.data, type: "groupList" } })
 				});
 				break;
 			case 'getChatLists':
 				wx.apiRequest("/api/home/getChatLists", {
-					data,
 					success: res => res.data.code == 200 && this.setData({ dropDownMenu: { list: res.data.data, type: "chatList" } })
 				});
 				break;
 			case 'giftList':
 				wx.apiRequest("/api/room/gift", {
-					data,
 					success: res => res.data.code == 200 && this.setData({ giftList: res.data.data })
 				});
 				break;
@@ -252,21 +293,35 @@ Page({
 				wx.apiRequest("/api/room/join", {
 					data,
 					success: res => {
-						this.data.tabIndex = res.data.data.roomtype == 2 ? 2 : 1;
-						this.data.topBar[res.data.data.roomtype] = res.data.data.nickname.length >= 4 ? res.data.data.nickname.substr(0, 4) + '...' : res.data.data.nickname;
-						this.setData({
-							tabIndex: this.data.tabIndex,
-							[res.data.data.roomtype == 2 ? 'userInfo' : 'targetInfo']: res.data.data,
-							topBar: this.data.topBar,
-							scrollTop: res.data.data.history.length * 1000
-						});
+						if (res.data.code == 200) {
+							this.data.tabIndex = res.data.data.roomtype == 2 ? 2 : 1;
+							this.data.topBar[this.data.tabIndex] = res.data.data.nickname.length >= 4 ? res.data.data.nickname.substr(0, 4) + '...' : res.data.data.nickname;
+							this.setData({
+								tabIndex: this.data.tabIndex,
+								[res.data.data.roomtype == 2 ? 'userInfo' : 'targetInfo']: res.data.data,
+								topBar: this.data.topBar,
+								scrollTop: res.data.data.history.length * 1000
+							});
+						} else {
+							wx.showToast({ title: res.data.msg, icon: "none" })
+						}
 					}
 				});
 				break;
 			case "getbar":
-				wx.apiRequest("/api/login/getbar", {
-					data,
-					success: res => res.data.code == 200 && this.setData({ dropDownMenu: { list: res.data.data.bar, type: "bar" } })
+				wx.getLocation({
+					altitude: false,
+					success: res => {
+						wx.apiRequest("/api/login/getbar", {
+							data: {
+								longitude: res.longitude,
+								latitude: res.latitude,
+							},
+							success: res => res.data.code == 200 && this.setData({
+								dropDownMenu: { list: res.data.data.bar, type: "bar" }
+							})
+						});
+					}
 				});
 				break;
 
@@ -288,7 +343,6 @@ Page({
 				break;
 			case 'getmsg':
 				wx.apiRequest("/api/user/getmsg", {
-					data,
 					success: res => {
 						this.setData({ applyList: res.data.data });
 					}
@@ -308,7 +362,6 @@ Page({
 				break;
 			default:
 				wx.apiRequest("/api/home/getMember", {
-					data,
 					success: res => {
 						if (res.data.code == 200) {
 							res = res.data.data;
@@ -341,35 +394,11 @@ Page({
 		console.log("加载更多...")
 	},
 
-	onShow() {
-		setInterval(() => {
-			wx.getLocation({
-				altitude: false,
-				success: res => {
-					let longitude_start = wx.getStorageSync("longitude_start"),
-						latitude_end = wx.getStorageSync("latitude_end"),
-						latitude_start = wx.getStorageSync("latitude_start"),
-						longitude_end = wx.getStorageSync("longitude_end");
-
-					// console.log(res.longitude * 1000000 >= longitude_end * 1000000 || res.longitude * 1000000 <= longitude_start * 1000000 ||
-					// 	res.latitude * 1000000 >= latitude_end * 1000000 || res.latitude * 1000000 <= latitude_start * 1000000)
-
-					if (res.longitude >= longitude_end || res.longitude <= longitude_start || res.latitude >= latitude_end || res.latitude <= latitude_start) {
-						wx.redirectTo({ url: '../index/index' })
-					}
-				}
-			});
-		}, (1000 * 60 * 10));
-
-
-	},
-
 	onLoad(options) {
 		wx.onSocketMessage(res => {
-			console.log('收到服务器内容：', JSON.parse(res.data));
 			res = JSON.parse(res.data);
 			switch (res.type) {
-				case "service":
+				case "friend":
 					this.setData({ isMarker: true });
 					break;
 				case "notify":
@@ -380,11 +409,13 @@ Page({
 				case "chat":
 					let accountInfo = res.type == "group" ? this.data.targetInfo : this.data.userInfo;
 					accountInfo.history && accountInfo.history.push(res);
-					console.log(accountInfo)
 					this.setData({
 						[res.type == "group" ? "targetInfo" : "userInfo"]: accountInfo,
 						scrollTop: accountInfo.history ? accountInfo.history.length * 1000 : 0
 					});
+					break;
+				case "agree":
+					console.log(res);
 					break;
 			}
 		});
@@ -406,5 +437,21 @@ Page({
 		}));
 
 		this.apiRequest();
+
+		let timer = setInterval(() => {
+			wx.getLocation({
+				altitude: false,
+				success: res => {
+					let longitude_start = wx.getStorageSync("longitude_start"),
+						latitude_end = wx.getStorageSync("latitude_end"),
+						latitude_start = wx.getStorageSync("latitude_start"),
+						longitude_end = wx.getStorageSync("longitude_end");
+					if (res.longitude >= longitude_end || res.longitude <= longitude_start || res.latitude >= latitude_end || res.latitude <= latitude_start) {
+						clearInterval(timer);
+						wx.reLaunch({ url: '/pages/index/index' })
+					}
+				}
+			});
+		}, 600000);
 	}
 })

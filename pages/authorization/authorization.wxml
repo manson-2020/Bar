@@ -1,2 +1,0 @@
-<!-- pages/authorization/authorization.wxml -->
-<button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="authorization white_color">微信授权登录</button>

@@ -12,7 +12,6 @@ Page({
 
     goto() {
         let url;
-        console.log(this.data.params.bar[0].page)
         switch (this.data.params.bar[0].page) {
             case 1:
                 url = `../basicInfo/basicInfo?showMain=1&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
@@ -33,23 +32,24 @@ Page({
 
     select(e) {
         this.data.params.bar.unshift(this.data.params.bar.splice(e.currentTarget.dataset.index, 1)[0]);
-        this.setData({ params: this.data.params, isShowMenu: false });
+        this.setData({ params: this.data.params, isShowMenu: false }, this.goto);
     },
 
     scanCode() {
         wx.scanCode({
             success: res => {
-                console.log(res)
-                wx.showToast({
-                    title: '成功',
-                    duration: 2000
-                })
-            },
-            fail: res => {
-                wx.showToast({
-                    title: '失败',
-                    duration: 2000
-                })
+                for (let index = 0; index < this.data.params.bar.length; index++) {
+                    if (this.data.params.bar[index].bid == JSON.parse(res.result).bid) {
+                        this.select({ currentTarget: { dataset: { index } } });
+                        break;
+                    } else if (this.data.params.bar.length - 1 == index) {
+                        wx.showToast({
+                            icon: "none",
+                            title: '找不到对应的酒吧',
+                            duration: 2000
+                        })
+                    }
+                }
             }
         })
     },
@@ -59,7 +59,6 @@ Page({
             type: 'wgs84',
             success: res => {
                 wx.apiRequest("/api/login/getbar", {
-                    method: "post",
                     data: {
                         latitude: res.latitude,
                         longitude: res.longitude,

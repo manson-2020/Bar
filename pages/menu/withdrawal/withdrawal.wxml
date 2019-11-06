@@ -9,22 +9,22 @@
         </view>
     </view>
     <view class="main white_color">
-        <view class="title fs36">有钱的肖战</view>
+        <view class="title fs36">{{wallet.nickname}}</view>
         <view class="option1 fs26">
             <text class="key">账户余额：</text>
-            <text class="value">￥520.20</text>
+            <text class="value">￥{{wallet.money}}</text>
         </view>
         <view class="option2 fs26">
             <text class="key">提现金额：</text>
-            <input class="value" type="number" />
+            <input class="value" type="number" value="{{money}}" bindinput="saveInput" data-type="money" />
         </view>
-        <view class="tips fs16">
+        <view class="tips fs18">
             <view class="tips-title">友情提示：</view>
             <view>1.提现金额必须是10或100的倍数;</view>
             <view>2.会员提现至微信钱包;</view>
         </view>
         <view class="btn-container fs30">
-            <view class="confirm">
+            <view class="confirm" bindtap="submit">
                 <image src="../../../images/bg-btn.png" />
                 <text>提 现</text>
             </view>
@@ -40,7 +40,7 @@
             <text class="title-text">提现详情</text>
         </view>
         <scroll-view class="record fs22" scroll-y="{{true}}">
-            <view wx:for="{{record}}" wx:key="index" class="record-item">
+            <view wx:for="{{wallet.log}}" wx:key="index" class="record-item">
                 <text class="time">{{item.time}}</text>
                 <text class="money">￥ {{item.money}}</text>
             </view>

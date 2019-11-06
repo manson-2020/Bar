@@ -18,9 +18,9 @@ App({
         });
 
         wx.connectSocket({ url: 'wss://bar.shdong.cn:9898' });
-        wx.onSocketError(res => console.log(res));
-        wx.onSocketOpen(() => console.log('WebSocket 已打开！'));
-        wx.onSocketClose(res => console.log('WebSocket 已关闭！'));
+        wx.onSocketError(err => console.log(err));
+        wx.onSocketOpen(_ => console.log('WebSocket 已打开！'));
+        wx.onSocketClose(_ => console.log('WebSocket 已关闭！'));
     },
 
     globalData: {

@@ -49,7 +49,7 @@
             <view class="gift white_color fs26">
                 <text class="gift-type">{{item.figt}}</text>
                 <text class="price">
-                    <text class="symbol">+ ￥</text>
+                    <text class="symbol">- ￥</text>
                     <text class="number">{{item.money}}</text>
                 </text>
             </view>

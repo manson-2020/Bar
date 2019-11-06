@@ -26,8 +26,8 @@ Page({
 					filePath: res.tempFilePaths[0],
 					name: 'image',
 					complete: res => {
+						let result = JSON.parse(res.data);
 						if (res.statusCode == 200) {
-							let result = JSON.parse(res.data);
 							wx.apiRequest("/api/user/upinfo", {
 								data: { avatar: "https://bar.shdong.cn" + result.data.path },
 								success: res => {
@@ -128,7 +128,6 @@ Page({
 			success: res => {
 				if (res.data.code == 200) {
 					res = res.data.data;
-					console.log(res)
 					this.setData({
 						avatar: res.avatar,
 						firstList: [

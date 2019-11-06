@@ -60,7 +60,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin: 41rpx 36rpx 0;
+    margin: 0 36rpx;
 }
 
 .box-item {
@@ -375,10 +375,13 @@ button[size=mini] {
     display: flex;
 }
 
+.bg_1b {
+    background-color: #1B1B1B;
+}
+
 .notice-box {
     width: 100%;
     height: 100%;
-    background-color: #1B1B1B;
     border-radius: 20rpx;
 }
 
