@@ -1,7 +1,7 @@
 /* pages/my/my.wxss */
 
-.main {
-    margin: 50rpx 25rpx 0;
+.container {
+    margin: 0 25rpx;
 }
 
 .bg-black {

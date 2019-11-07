@@ -119,7 +119,7 @@ Page({
 	},
 
 	sendMsg(e) {
-		if (!this.data.targetInfo.hasgift && this.data.targetInfo.roomtype == 1) {
+		if (!this.data.targetInfo.hasgift && this.data.tabIndex == 1) {
 			wx.showToast({ title: "送过礼物才能发送哦！", icon: 'none' });
 			return;
 		}
@@ -152,7 +152,7 @@ Page({
 	pay(e) {
 		this.apiRequest("giveGift", {
 			ptype: Number(e.currentTarget.dataset.type),
-			rid: this.data[(this.data.tabIndex == 1 ? 'target' : 'user') + 'Info'].rid,
+			uid: this.data[(this.data.tabIndex == 1 ? 'target' : 'user') + 'Info'].uid,
 			gid: this.data.currentGoods.gid,
 			roomtype: this.data.tabIndex
 		})
@@ -170,42 +170,36 @@ Page({
 				break;
 			default:
 				this.switchHall(item)
-				// this.apiRequest("upinfo", { bid: item.bid });
 				break;
 		}
 	},
 
 	switchHall(params, url = String()) {
 		switch (Number(params.page)) {
-			case 1: case 2:
-				url = `../basicInfo/basicInfo?showMain=${params.page}&name=${params.name}&bid=${params.bid}`;
+			case 1:
+				url = `../basicInfo/basicInfo?showMain=1&name=${params.name}&bid=${params.bid}`;
+				break;
+			case 2:
+				url = `../basicInfo/basicInfo?showMain=0&name=${params.name}&bid=${params.bid}`;
 				break;
 			default:
-				url = `../home/home`
+				url = `home`
 				break;
 		}
-		wx.navigateTo({ url })
+		wx.redirectTo({ url })
 	},
 
 	scanCode() {
 		wx.scanCode({
 			success: resCode => {
-				wx.apiRequest("/api/login/getbar", {
+				resCode = JSON.parse(resCode.result);
+				wx.apiRequest("/api/login/getPage", {
+					data: { bid: resCode.bid },
 					success: res => {
 						if (res.data.code == 200) {
-							this.switchHall(JSON.parse(resCode.result));
-							// for (let index = 0; index < res.data.data.bar.length; index++) {
-							// 	if (res.data.data.bar[index].bid == JSON.parse(resCode.result).bid) {
-							// 		this.apiRequest("upinfo", { bid: res.data.data.bar[index].bid });
-							// 		break;
-							// 	} else if (res.data.data.bar.length - 1 == index) {
-							// 		wx.showToast({
-							// 			icon: "none",
-							// 			title: '找不到对应的酒吧',
-							// 			duration: 2000
-							// 		})
-							// 	}
-							// }
+							this.switchHall({ page: res.data.data, name: resCode.name, bid: resCode.bid });
+						} else {
+							wx.showToast({ title: "服务器错误", icon: "none" })
 						}
 					}
 				});
@@ -246,7 +240,10 @@ Page({
 									paySign: res.data.data.paySign,
 									success: _ => {
 										wx.apiRequest("/api/pay/selectOrder", {
-											data: { orderId: res.data.data.orderId },
+											data: {
+												orderId: res.data.data.orderId,
+												roomtype: this.data.tabIndex
+											},
 											success: res => {
 												wx.showToast({
 													title: res.data.msg,
@@ -286,7 +283,14 @@ Page({
 				break;
 			case 'giftList':
 				wx.apiRequest("/api/room/gift", {
-					success: res => res.data.code == 200 && this.setData({ giftList: res.data.data })
+					success: res => {
+						if (res.data.code == 200) {
+							this.data.hallInfo.money = res.data.data.money;
+							this.setData({ giftList: res.data.data.list, hallInfo: this.data.hallInfo })
+						} else {
+							wx.showToast({ title: "服务器错误！", icon: "none" })
+						}
+					}
 				});
 				break;
 			case 'joinRoom':
@@ -295,7 +299,7 @@ Page({
 					success: res => {
 						if (res.data.code == 200) {
 							this.data.tabIndex = res.data.data.roomtype == 2 ? 2 : 1;
-							this.data.topBar[this.data.tabIndex] = res.data.data.nickname.length >= 4 ? res.data.data.nickname.substr(0, 4) + '...' : res.data.data.nickname;
+							this.data.topBar[this.data.tabIndex] = res.data.data.nickname;
 							this.setData({
 								tabIndex: this.data.tabIndex,
 								[res.data.data.roomtype == 2 ? 'userInfo' : 'targetInfo']: res.data.data,
@@ -348,12 +352,6 @@ Page({
 					}
 				})
 				break;
-			case 'upinfo':
-				wx.apiRequest("/api/login/upinfo", {
-					data,
-					success: res => this.apiRequest(),
-				})
-				break;
 			case 'agree':
 				wx.apiRequest("/api/room/agree", {
 					data,
@@ -394,9 +392,14 @@ Page({
 		console.log("加载更多...")
 	},
 
+	onShow() {
+		this.apiRequest();
+	},
+
 	onLoad(options) {
 		wx.onSocketMessage(res => {
 			res = JSON.parse(res.data);
+			console.log(res)
 			switch (res.type) {
 				case "friend":
 					this.setData({ isMarker: true });
@@ -436,7 +439,6 @@ Page({
 			headerBarHeight: res[1].height
 		}));
 
-		this.apiRequest();
 
 		let timer = setInterval(() => {
 			wx.getLocation({

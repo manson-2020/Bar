@@ -1,13 +1,5 @@
 <!-- pages/query/query.wxml -->
 <view class="container">
-    <view style="height: {{statusBarHeight}}px;" class="statusBar"></view>
-    <view class="header" style="height: {{menuButton.height}}px;">
-        <image src="../../../images/icon-back.png" class="icon-left" bindtap="goBack" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
-        <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
-            <image src="../../../images/icon-search.png" class="icon-search" />
-            <input class="search-input" />
-        </view>
-    </view>
     <view class="topTab white_color fs26">
         <view wx:for="{{topTab}}" wx:key="*this" data-index="{{index}}" bindtap="switchTab" class="tab {{tabIndex == index && 'active'}}">
             我{{item}}的礼物

@@ -1,12 +1,12 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/menu/withdrawal/withdrawal",
     "pages/home/home",
-    "pages/menu/my/my",
+    "pages/menu/withdrawal/withdrawal",
+    "pages/menu/service/service",
     "pages/menu/query/query",
-    "pages/basicInfo/basicInfo",
-    "pages/menu/service/service"
+    "pages/menu/my/my",
+    "pages/basicInfo/basicInfo"
   ],
   "window": {
     "navigationBarBackgroundColor": "#000",

@@ -1,7 +1,7 @@
 /* pages/query/query.wxss */
 
 .topTab {
-    margin: 50rpx 54rpx 0;
+    margin: 0 54rpx;
     display: flex;
     border: #FB61C6 2rpx solid;
     border-radius: 10rpx;

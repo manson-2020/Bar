@@ -11,11 +11,11 @@
             <text class="option-title">用户类型：</text>
             <radio-group class="radio-group" data-type="ident" bindchange="choose">
                 <label class="radio-label">
-                    <radio value="0" checked="{{ident == 0}}" />
+                    <radio value="1" checked="{{ident == 1}}" />
                     <text class="radio-text">普通会员</text>
                 </label>
                 <label class="radio-label">
-                    <radio value="1" checked="{{ident == 1}}" />
+                    <radio value="2" checked="{{ident == 2}}" />
                     <text class="radio-text">工作人员</text>
                 </label>
             </radio-group>
@@ -59,6 +59,6 @@
     <text class="tips">重要提示：保存后，性别将不能修改</text>
     <view class="step-btn">
         <image src="../../images/icon-previousStep.png" bindtap="step" data-type="previous" class="icon-step" />
-        <image src="../../images/icon-{{!ident && showMain ? 'nextStep' : 'done'}}.png" data-type="next" bindtap="step" class="icon-step" />
+        <image src="../../images/icon-{{ident == 1 && showMain ? 'nextStep' : 'done'}}.png" data-type="next" bindtap="step" class="icon-step" />
     </view>
 </view>

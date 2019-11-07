@@ -20,6 +20,7 @@ Page({
                 url = `../basicInfo/basicInfo?showMain=0&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
                 break;
             default:
+                wx.apiRequest("/api/login/upinfo", { data: { bid: this.data.params.bar[0].bid } })
                 url = `../home/home`
                 break;
         }
@@ -54,7 +55,7 @@ Page({
         })
     },
 
-    onLoad() {
+    onShow() {
         wx.getLocation({
             type: 'wgs84',
             success: res => {
@@ -67,5 +68,6 @@ Page({
                 })
             }
         })
-    }
+    },
+
 })

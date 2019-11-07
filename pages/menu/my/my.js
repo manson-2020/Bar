@@ -57,7 +57,7 @@ Page({
 
 	transformUser() {
 		wx.showModal({
-			title: "警告！", content: "你的操作不可逆！", cancelColor: "#FB61C6", success: res => {
+			title: "警告！", content: "转换用户角色后不能再转为工作人员！", cancelColor: "#FB61C6", success: res => {
 				if (res.confirm) {
 					wx.apiRequest("/api/user/upinfo", {
 						data: { worker: 1 },

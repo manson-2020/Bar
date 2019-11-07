@@ -8,7 +8,6 @@
 
 .option1, .option2 {
     display: flex;
-    /* width: 290rpx; */
     align-items: center;
     justify-content: center;
     margin: 0 auto;

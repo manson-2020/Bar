@@ -1,55 +1,45 @@
 <!-- pages/my/my.wxml -->
 <view class="container white_color">
-    <view style="height: {{statusBarHeight}}px;" class="statusBar"></view>
-    <view class="header" style="height: {{menuButton.height}}px;">
-        <image src="../../../images/icon-back.png" class="icon-left" bindtap="goBack" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
-        <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
-            <image src="../../../images/icon-search.png" class="icon-search" />
-            <input class="search-input" />
+    <view class="my-list fs30">
+        <view class="item bg-black h140">
+            <text class="key">我的头像</text>
+            <view class="value">
+                <view bindtap="uploadAvatar" class="avatar" style="background-image: url({{avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}) " />
+            </view>
+        </view>
+        <view class="my-item bg-black">
+            <view class="item-box" wx:for="{{firstList}}" wx:key="index">
+                <view wx:if="{{index}}" class="line" />
+                <view class="item h112" bindtap="edit" data-index="{{index}}">
+                    <text class="key">{{item.key}}</text>
+                    <view class="value">
+                        <text class="value-text">{{item.value}}</text>
+                        <image wx:if="{{index}}" class="icon-right" src="../../../images/icon-right.png" />
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="my-item bg-black">
+            <picker wx:for="{{secondList}}" wx:key="index" disabled="{{!index}}" mode="{{item.mode}}" range="{{(index == 2) && constellation}}" data-type="{{item.remarks}}" bindchange="saveValue" class="item-box">
+                <view wx:if="{{index}}" class="line" />
+                <view class="item h112">
+                    <text class="key">{{item.key}}</text>
+                    <view class="value">
+                        <text class="value-text">{{item.value}}</text>
+                        <image wx:if="{{index}}" class="icon-right" src="../../../images/icon-right.png" />
+                    </view>
+                </view>
+            </picker>
         </view>
     </view>
-    <view class="main">
-        <view class="my-list fs30">
-            <view class="item bg-black h140">
-                <text class="key">我的头像</text>
-                <view class="value">
-                    <image bindtap="uploadAvatar" class="avatar" src="{{avatar || 'https://bar.shdong.cn/public/static/img/avatar.jpg'}}" />
-                </view>
-            </view>
-            <view class="my-item bg-black">
-                <view class="item-box" wx:for="{{firstList}}" wx:key="index">
-                    <view wx:if="{{index}}" class="line" />
-                    <view class="item h112" bindtap="edit" data-index="{{index}}">
-                        <text class="key">{{item.key}}</text>
-                        <view class="value">
-                            <text class="value-text">{{item.value}}</text>
-                            <image wx:if="{{index}}" class="icon-right" src="../../../images/icon-right.png" />
-                        </view>
-                    </view>
-                </view>
-            </view>
-            <view class="my-item bg-black">
-                <picker wx:for="{{secondList}}" wx:key="index" disabled="{{!index}}" mode="{{item.mode}}" range="{{(index == 2) && constellation}}" data-type="{{item.remarks}}" bindchange="saveValue" class="item-box">
-                    <view wx:if="{{index}}" class="line" />
-                    <view class="item h112">
-                        <text class="key">{{item.key}}</text>
-                        <view class="value">
-                            <text class="value-text">{{item.value}}</text>
-                            <image wx:if="{{index}}" class="icon-right" src="../../../images/icon-right.png" />
-                        </view>
-                    </view>
-                </picker>
-            </view>
-        </view>
-        <view wx:if="{{isWorker}}">
-            <text class="tips fs20">注意：转换用户角色后不能再转为工作人员</text>
-            <view class="transform-btn fs42" bindtap="transformUser">
-                <image src="../../../images/border-btn.png" />
-                <text>转为普通会员</text>
-            </view>
+    <view wx:if="{{isWorker}}">
+        <text class="tips fs20">注意：转换用户角色后不能再转为工作人员</text>
+        <view class="transform-btn fs42" bindtap="transformUser">
+            <image src="../../../images/border-btn.png" />
+            <text>转为普通会员</text>
         </view>
     </view>
 </view>
 <modal hidden="{{showModal}}" title="修改{{modalTitle}}" data-type="{{modalType}}" confirm-text="确认" cancel-text="取消" bindcancel="hide" bindconfirm="submit">
-    <input bindinput="saveValue" maxlength="16" value="{{modalInput}}" data-type="{{modalType}}" auto-focus="{{true}}" />
+    <input bindinput="saveValue" maxlength="16" value="{{modalInput}}" data-type="{{modalType}}" auto-focus="{{true}}" placeholder="请输入{{modalTitle}}" />
 </modal>

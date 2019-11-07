@@ -1,13 +1,7 @@
 /* pages/service/service.wxss */
 
-.main {
+.container {
     margin: 50rpx 48rpx 0;
-    font-weight: 400;
-    letter-spacing: 9rpx;
-}
-
-.title {
-    text-align: center;
 }
 
 .explain{

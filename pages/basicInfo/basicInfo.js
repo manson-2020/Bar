@@ -9,7 +9,7 @@ Page({
         isWorker: false,
         titleHeight: 0,
         showMain: true,
-        ident: '',
+        ident: 1,
         gender: '',
         nickname: '',
         phoneNumber: '',
@@ -29,36 +29,50 @@ Page({
                 this.setData({ showMain: true });
             }
         } else {
-            if (this.data.ident) {
-                console.log("工作人员，提交数据后直接跳转");
-                wx.apiRequest("/api/login/upinfo", {
-                    method: "post",
-                    data: {
-                        bid: this.data.barInfo.bid,
-                        is_work: this.data.ident,
-                        name: this.data.nickname,
-                        mobile: this.data.phoneNumber,
-                        sex: this.data.gender,
-                    },
-                    success: res => res.data.code == 200 && wx.redirectTo({ url: `../home/home?bar_name=${this.data.barInfo.name}` }),
-                    fail: err => console.log(err)
-                })
-            } else {
-                if (!this.data.showMain) {
+            if (this.data.ident == 2) {
+                if (this.data.barInfo.bid
+                    && this.data.ident
+                    && this.data.nickname
+                    && /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(this.data.phoneNumber)
+                    && this.data.gender
+                ) {
                     wx.apiRequest("/api/login/upinfo", {
                         method: "post",
                         data: {
                             bid: this.data.barInfo.bid,
-                            is_work: this.data.ident,
+                            worker: this.data.ident,
                             nickname: this.data.nickname,
                             mobile: this.data.phoneNumber,
                             sex: this.data.gender,
-                            seat: this.data.seatNumber,
-                            color: this.data.clothesColor
                         },
                         success: res => res.data.code == 200 && wx.redirectTo({ url: `../home/home?bar_name=${this.data.barInfo.name}` }),
                         fail: err => console.log(err)
                     })
+                } else {
+                    wx.showToast({ title: "0---请检查信息是否完整或者手机号码是否正确！", icon: "none", duration: 3000 })
+                }
+
+            } else {
+                if (!this.data.showMain) {
+                    if (this.data.barInfo.bid
+                        && this.data.seatNumber
+                        && this.data.clothesColor
+                    ) {
+                        wx.apiRequest("/api/login/upinfo", {
+                            method: "post",
+                            data: {
+                                bid: this.data.barInfo.bid,
+                                worker: 1,
+                                seat: this.data.seatNumber,
+                                color: this.data.clothesColor
+                            },
+                            success: res => res.data.code == 200 && wx.redirectTo({ url: `../home/home?bar_name=${this.data.barInfo.name}` }),
+                            fail: err => console.log(err)
+                        })
+                    } else {
+                        wx.showToast({ title: "1---请检查信息是否完整或者手机号码是否正确！", icon: "none", duration: 3000 })
+                    }
+
                 } else {
                     this.setData({ showMain: false });
                 }
@@ -82,7 +96,6 @@ Page({
     },
 
     onLoad(options) {
-        // console.log(options);return
         this.setData({ showMain: !!Number(options.showMain), isWorker: !Number(options.showMain), barInfo: { bid: options.bid, name: options.name } });
     }
 })

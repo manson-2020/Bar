@@ -1,19 +1,8 @@
 <!-- pages/service/service.wxml -->
-<view class="container">
-    <view style="height: {{statusBarHeight}}px;" class="statusBar"></view>
-    <view class="header" style="height: {{menuButton.height}}px;">
-        <image src="../../../images/icon-back.png" class="icon-left" bindtap="goBack" style="width: {{menuButton.height - 7}}px; height: {{menuButton.height - 7}}px;" />
-        <view class="search" style="height: {{menuButton.height}}px; line-height: {{menuButton.height}}px; left: {{menuButton.right-menuButton.left-20}}px">
-            <image src="../../../images/icon-search.png" class="icon-search" />
-            <input class="search-input" />
-        </view>
-    </view>
-    <view class="main white_color">
-        <view class="title fs36">客服中心</view>
-        <view class="explain fs22">{{content}}</view>
-        <view class="closeBtn" bindtap="goBack">
-            <image class="border-btn" src="../../../images/border-btn.png" />
-            <text class="btn-text">关闭</text>
-        </view>
+<view class="container white_color">
+    <view class="explain fs22">{{content}}</view>
+    <view class="closeBtn" bindtap="goBack">
+        <image class="border-btn" src="../../../images/border-btn.png" />
+        <text class="btn-text">关闭</text>
     </view>
 </view>
