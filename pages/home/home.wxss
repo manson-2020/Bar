@@ -114,7 +114,7 @@
 .icon-down {
     width: 36rpx;
     height: 36rpx;
-    padding: 9rpx 22rpx;
+    padding: 9rpx 18rpx;
 }
 
 .active {

@@ -131,8 +131,6 @@ radio .wx-radio-input.wx-radio-input-checked::before {
     width: 378rpx;
     background: rgba(255, 255, 255, 0.59);
     border-radius: 22px;
-    left: 87px;
-    line-height: 45rpx;
 }
 
 .icon-search {

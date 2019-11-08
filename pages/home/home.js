@@ -176,11 +176,8 @@ Page({
 
 	switchHall(params, url = String()) {
 		switch (Number(params.page)) {
-			case 1:
-				url = `../basicInfo/basicInfo?showMain=1&name=${params.name}&bid=${params.bid}`;
-				break;
-			case 2:
-				url = `../basicInfo/basicInfo?showMain=0&name=${params.name}&bid=${params.bid}`;
+			case 1: case 2:
+				url = `../basicInfo/basicInfo?page=${params.page}&name=${params.name}&bid=${params.bid}`;
 				break;
 			default:
 				url = `home`

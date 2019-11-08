@@ -6,7 +6,7 @@
             完善基本信息
         </view>
     </view>
-    <view wx:if="{{showMain}}" class="main" style="margin-top: calc({{titleHeight+statusBarHeight}}px + 18rpx);">
+    <view wx:if="{{page == 1}}" class="main" style="margin-top: calc({{titleHeight+statusBarHeight}}px + 18rpx);">
         <view class="option">
             <text class="option-title">用户类型：</text>
             <radio-group class="radio-group" data-type="ident" bindchange="choose">
@@ -46,7 +46,7 @@
             <input disabled="true" data-item="hall" class="input" value="{{barInfo.name}}" placeholder-class="placeholder" />
         </view>
     </view>
-    <view wx:if="{{!showMain}}" class="main-2" style="margin-top: calc({{titleHeight+statusBarHeight}}px + 18rpx);">
+    <view wx:if="{{page == 2}}" class="main-2" style="margin-top: calc({{titleHeight+statusBarHeight}}px + 18rpx);">
         <view class="option">
             <text class="option-title">卡座号：</text>
             <input bindinput="saveInput" data-item="seatNumber" class="input" value="{{seatNumber}}" placeholder="填写座位号可以大幅增加收到礼物的机会" placeholder-class="placeholder" />
@@ -59,6 +59,6 @@
     <text class="tips">重要提示：保存后，性别将不能修改</text>
     <view class="step-btn">
         <image src="../../images/icon-previousStep.png" bindtap="step" data-type="previous" class="icon-step" />
-        <image src="../../images/icon-{{ident == 1 && showMain ? 'nextStep' : 'done'}}.png" data-type="next" bindtap="step" class="icon-step" />
+        <image src="../../images/icon-{{ident == 1 && page == 1 ? 'nextStep' : 'done'}}.png" data-type="next" bindtap="step" class="icon-step" />
     </view>
 </view>

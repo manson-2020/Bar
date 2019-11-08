@@ -11,16 +11,13 @@ Page({
     },
 
     goto() {
-        let url;
-        switch (this.data.params.bar[0].page) {
-            case 1:
-                url = `../basicInfo/basicInfo?showMain=1&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
-                break;
-            case 2:
-                url = `../basicInfo/basicInfo?showMain=0&name=${this.data.params.bar[0].name}&bid=${this.data.params.bar[0].bid}`;
+        let [url, bar] = [, this.data.params.bar[0]];
+        switch (bar.page) {
+            case 1: case 2:
+                url = `../basicInfo/basicInfo?page=${bar.page}&name=${bar.name}&bid=${bar.bid}`;
                 break;
             default:
-                wx.apiRequest("/api/login/upinfo", { data: { bid: this.data.params.bar[0].bid } })
+                wx.apiRequest("/api/login/upinfo", { data: { bid: bar.bid } })
                 url = `../home/home`
                 break;
         }
